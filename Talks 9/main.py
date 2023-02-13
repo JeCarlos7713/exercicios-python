@@ -1,11 +1,10 @@
 
-
 class Account:
     #atributos:
     __account_number = None
     __agency = None
     __account_holder = None
-    __account_balance = None
+    __account_balance = 0.00
 
     #definindo constructor
     def __init__(self, agency: str, account_number: str, account_holder: str, account_balance: float) -> None: #self busca o escopo do contexto Account
@@ -40,25 +39,84 @@ class Account:
     def set_account_holder(self, holder):
         self.__account_holder = holder
 
+    def __has_balance(self, amount):
+        if self.__account_balance <= 0 or self.__account_balance < amount :
+            return False
+        else:
+            return True
 
+    def cash_in(self, amount: float):
+        print("Olá ", self.__account_holder, "! Seja bem-vindo(a)")
+        if amount > 0.0:
+            self.__account_balance += amount
+            print("Depósito de R$", amount, " realizado com sucesso! Saldo atual: R$", self.__account_balance)
+        else:
+           print('Não houve depósito. Valor atual: R$', self.__account_balance)
+        
+
+    def cash_out(self, amount: float):
+        print("Olá ", self.__account_holder, "! Seja bem-vindo(a)")
+        is_balance = self.__has_balance(amount=amount)
+        if is_balance:
+            if amount > 0.0:
+                self.__account_balance -= amount
+                print("Saque de R$", amount, " realizado com sucesso! Saldo atual: R$", self.__account_balance)
+            else:
+                print('Não houve saque. Valor atual: R$', self.__account_balance)
+        else:
+            print("Você não tem saldo suficiente")    
 
 
 def main():
-    account_01 = Account(agency="001", account_number="12345678-9", account_holder="Jean Carlos", account_balance=10000.00)
+    print("#" * 60)
+    print("MFX Banking")
+    print("#" * 60)
+
+    print("Informe sua agência:")
+    agency = input()
+
+    print("Informe o número da conta:")
+    account = input()
+
+    print("Informe o nome do cliente:")
+    holder = input()
+
+    print("Informe o saldo da conta")
+    balance = input()
+
+    account_01 = Account(
+        agency=agency, 
+        account_number=account, 
+        account_holder=holder, 
+        account_balance=float(balance)
+    )
+
+    print("#" * 60)
+    print("Selecione a operação:")
+    print("#1 - Cash-In \n #2 - Cash-Out")
+    operation = input()
     
-    
-    """
+    if operation in '1':
+        print("Digite o valor a ser depositado: ")
+        amount_cash_in = input()
+        account_01.cash_in(float(amount_cash_in))
+    elif operation in '2':
+        print("Digite o valor a ser sacado: ")
+        amount_cash_out = input()
+        account_01.cash_out(float(amount_cash_out))
+
+
+if __name__ == "__main__":
+    main()
+
+
+"""
     Modo errado de setar valor no meu atributo
     account_01.__account_holder='erikola'
 
     Modo errado de buscar uma informação do meu atributo
     print(account_01.account_balance)
-    """
-
-    #modo certo
+    modo certo
     account_01.set_account_balance(20000.00)
     print(account_01.__account_holder)
-
-
-if __name__ == "__main__":
-    main()
+"""
